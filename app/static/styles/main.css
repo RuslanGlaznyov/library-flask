@@ -1,0 +1,30 @@
+/*basic*/
+footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 10vh; /*высота футера будет зависеть от высоты экрана*/
+}
+html {
+    position: relative;
+    min-height: 100%;
+}
+body {
+    margin-bottom: 10vh;
+}
+
+/*--- margin and padding ---*/
+
+.md-margin-top {
+  margin-top: 40px;
+}
+
+.sm-margin-top {
+    margin-top: 20px;
+}
+.md-margin-button {
+    margin-bottom: 40px;
+}
+.sm-margin-right{
+    margin-right: 5px;
+}

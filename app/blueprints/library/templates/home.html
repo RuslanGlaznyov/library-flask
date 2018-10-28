@@ -1,0 +1,57 @@
+{% extends 'layouts/app.html' %}
+{% block body %}
+    <div class="row">
+        <div class="col-md-8 md-margin-top">
+            <div class="row justify-content-between" style="padding:0 20px">
+                <h1>List of item</h1>
+                <a href="{{ url_for('library.new') }}" class="btn btn-outline-success" role="button" style="height: 40px">New Book</a>
+            </div>
+
+            <div class="table-responsive-sm md-margin-top">
+                <table class="table">
+                    <thead class="thead-light">
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">icon</th>
+                        <th scope="col">title</th>
+                        <th scope="col">date</th>
+                        <th scope="col">star</th>
+                        <th scope="col">status</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for book in books %}
+                        <tr>
+                            <th scope="row">{{ book.id }}</th>
+                            <td><img src="{{ url_for('static', filename=book.icon_path) }}" style="width: 100px" alt=""></td>
+                            <td>{{ book.desc }}</td>
+{#                            <td>@mdo</td>#}
+                        </tr>
+
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <aside class="col-md-4 blog-sidebar">
+            <div class="p-3">
+                <h4 class="font-italic">Genre</h4>
+                <ol class="list-unstyled mb-0">
+                    <li><a href="#">lorem</a></li>
+                    <li><a href="#">lorem</a></li>
+                    <li><a href="#">lorem</a></li>
+                    <li><a href="#">lorem</a></li>
+                    <li><a href="#">lorem</a></li>
+                    <li><a href="#">lorem</a></li>
+                    <li><a href="#">lorem</a></li>
+                    <li><a href="#">lorem</a></li>
+                    <li><a href="#">lorem</a></li>
+                    <li><a href="#">lorem</a></li>
+                    <li><a href="#">lorem</a></li>
+                    <li><a href="#">lorem</a></li>
+                </ol>
+            </div>
+        </aside>
+    </div>
+
+{% endblock %}

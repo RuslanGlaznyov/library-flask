@@ -1,0 +1,72 @@
+
+{# Render a form field's label with visual aid to see if it's required. #}
+{%- macro field_label(f, css_class='') -%}
+{#  <label for="{{ f.id }}">#}
+    {%- if f.flags.required -%}
+      {{ f.label(class=css_class) }}
+{#        <span style="color: red">*</span>#}
+    {%- else %}
+      {{ f.label(class=css_class) }}
+    {%- endif %}
+{#  </label>#}
+{%- endmacro -%}
+
+{# Render a form field. #}
+{%- macro field(f, css_class='form-control', id='') -%}
+  {{ f(class=css_class, **kwargs) }}
+{%- endmacro -%}
+
+{# Render a form field's errors. #}
+{%- macro field_errors(f) -%}
+  {% if f.errors %}
+    <ul class="list-unstyled text-danger field-error">
+      {% for error in f.errors %}
+        <li>{{ error | e }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+{%- endmacro -%}
+
+{# Render a form tag that contains a CSRF token and all hidden fields. #}
+{%- macro form_tag(endpoint, fid='', css_class='', method='POST') -%}
+  <form action="{{ url_for(endpoint, **kwargs) }}" method="{{ method }}"
+        id="{{ fid }}" class="{{ css_class }}" role="form" enctype="multipart/form-data">
+    {{ form.hidden_tag() }}
+    {{ caller () }}
+  </form>
+{%- endmacro -%}
+
+{%- macro render_custom_upload(f, css_class='', id='')-%}
+        <div class="form-group  {{ css_class }}">
+            <div class="custom-file">
+                {{ field(f, css_class='custom-file-iput', **kwargs) }}
+                {{ field_label(f, css_class='custom-file-label') }}
+            </div>
+        {{ field_errors(f) }}
+        </div>
+{%- endmacro %}
+{# Render a form group with errors for various field types. #}
+{%- macro form_group(f, css_class='', id='', isCustomUpload=False) -%}
+{#    {{ css_class }}#}
+    {% if f.errors %}
+            {% set css_class = css_class + ' has-error ' + kwargs.pop('class', '') %}
+    {% endif %}
+
+    {% if isCustomUpload %}
+        {{ render_custom_upload(f, css_class, **kwargs) }}
+        {{ caller () }}
+    {% else %}
+        {% if f.type == 'BooleanField' %}
+            {#    <div class="checkbox {{ css_class }}">#}
+            {#    {{ checkbox_field(f, **kwargs) }}#}
+        {% else %}
+            <div class="form-group {{ css_class }}">
+            {{ field_label(f) }}
+            {{ field(f, **kwargs) }}
+        {% endif %}
+        {{ field_errors(f) }}
+        {{ caller () }}
+            </div>
+    {% endif %}
+{%- endmacro %}
+

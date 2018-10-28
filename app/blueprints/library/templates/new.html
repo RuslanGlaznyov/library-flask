@@ -1,0 +1,24 @@
+{% extends 'layouts/app.html' %}
+{% import 'macros/form.html'as f with context %}
+
+{% block body %}
+<div class="border" style="padding: 50px; margin-top: 50px; margin-bottom: 150px;">
+    {% call f.form_tag('library.new') %}
+        <h1>New Book form</h1>
+        {% call f.form_group(form.title, placeholder="Enter Title") %}
+        {% endcall %}
+        {% call f.form_group(form.desc, rows='12') %}
+        {% endcall %}
+        <div class="form-row">
+            {% call f.form_group(form.icon, css_class='col-md-6', isCustomUpload=True, id='icon') %}
+            {% endcall %}
+            {% call f.form_group(form.book, css_class='col-md-6', isCustomUpload=True, id='book') %}
+            {% endcall %}
+        </div>
+        {% call f.form_group(form.genre) %}
+        {% endcall %}
+        <button type="submit" class="btn btn-primary">save</button>
+        <a href="{{ url_for('library.home') }}" class="btn btn-danger" role="button" style="height: 40px">Cancel</a>
+    {% endcall %}
+</div>
+{% endblock %}
