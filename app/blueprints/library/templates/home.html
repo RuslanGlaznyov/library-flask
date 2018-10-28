@@ -15,7 +15,7 @@
                         <th scope="col">icon</th>
                         <th scope="col">title</th>
                         <th scope="col">date</th>
-                        <th scope="col">star</th>
+                        <th scope="col">rating</th>
                         <th scope="col">status</th>
                     </tr>
                     </thead>
@@ -23,11 +23,12 @@
                     {% for book in books %}
                         <tr>
                             <th scope="row">{{ book.id }}</th>
-                            <td><img src="{{ url_for('static', filename=book.icon_path) }}" style="width: 100px" alt=""></td>
-                            <td>{{ book.desc }}</td>
-{#                            <td>@mdo</td>#}
+                            <td><a href="{{ url_for('library.detail', genre=book.genre.title,  book_id=book.id, title=book.title) }}"><img src="{{ url_for('static', filename=book.icon_path) }}" style="width: 100px" alt=""></a></td>
+                            <td>{{ book.title }}</td>
+                            <td>{{ book.created_on }}</td>
+                            <td>{{ book.rating }}</td>
+                            <td>{{ book.status }}</td>
                         </tr>
-
                     {% endfor %}
                     </tbody>
                 </table>
@@ -37,18 +38,9 @@
             <div class="p-3">
                 <h4 class="font-italic">Genre</h4>
                 <ol class="list-unstyled mb-0">
-                    <li><a href="#">lorem</a></li>
-                    <li><a href="#">lorem</a></li>
-                    <li><a href="#">lorem</a></li>
-                    <li><a href="#">lorem</a></li>
-                    <li><a href="#">lorem</a></li>
-                    <li><a href="#">lorem</a></li>
-                    <li><a href="#">lorem</a></li>
-                    <li><a href="#">lorem</a></li>
-                    <li><a href="#">lorem</a></li>
-                    <li><a href="#">lorem</a></li>
-                    <li><a href="#">lorem</a></li>
-                    <li><a href="#">lorem</a></li>
+                    {% for gen in genre %}
+                        <li><a href="">{{ gen }}</a>
+                    {% endfor %}
                 </ol>
             </div>
         </aside>

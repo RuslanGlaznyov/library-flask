@@ -1,73 +1,54 @@
 {% extends 'layouts/app.html' %}
+{% import 'macros/form.html'as f with context %}
+
 
 {% block body %}
     <div class="row md-margin-top">
         <div class="left-block col-md-4">
             <div class="card" style="width: 18rem;">
-                <img class="card-img-top" src="#" alt="Card image cap">
+                <img class="card-img-top" src="{{ url_for('static', filename=book.icon_path) }}" alt="Card image cap">
                 <div class="card-body">
-                    <h5 class="card-title">Card title</h5>
-                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
-                        card's content.</p>
-                     <h4>Genre:</h4><a href="#" class="badge badge-success">some genre</a>
-                    <h4>Status: <span class="text-warning">In progress</span></h4>
+                    <h5 class="card-title">{{ book.title }}</h5>
+                    <p class="card-text">{{ book.desc }}</p>
+                     <h4>Genre:</h4><a href="#" class="badge badge-success">{{ book.genre.title }}</a>
+                    <h4>Status: <span style="color: green">{{ book.status }}</span></h4>
                     <a href="#" class="btn btn-primary btn-block">download</a>
                     <a href="#" class="btn btn-primary btn-block">send to telegram</a>
                     <a href="#" class="btn btn-danger btn-block">delete</a>
-
                 </div>
             </div>
             <div class="jumbotron sm-margin-top">
                 <h3>Change status</h3>
-                <a href="#" class="badge badge-success">Done</a>
-                <a href="#" class="badge badge-danger">Todo</a>
-                <a href="#" class="badge badge-warning">in progress</a>
-                <a href="#" class="badge badge-secondary">in case</a>
+                <a href="{{ url_for('library.change_status', genre=book.genre.title, book_id=book.id, title=book.title, status="Done") }}" class="badge badge-success">Done</a>
+                <a href="{{ url_for('library.change_status', genre=book.genre.title, book_id=book.id, title=book.title, status="Todo") }}" class="badge badge-danger">Todo</a>
+                <a href="{{ url_for('library.change_status', genre=book.genre.title, book_id=book.id, title=book.title, status="In progress") }}" class="badge badge-warning">in progress</a>
+                <a href="{{ url_for('library.change_status', genre=book.genre.title, book_id=book.id, title=book.title, status="Save") }}" class="badge badge-secondary">Save</a>
             </div>
         </div>
         <div class="right-block col-md-8 md-margin-button">
-            <h1>Comments</h1>
+            <h1>Notes</h1>
             <ul class="list-unstyled">
-                <li class="media">
-                    <div class="media-body">
-                        <h6 class="mt-0 mb-1 text-secondary">12.08.2018</h6>
-                        Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin. Cras
-                        purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi
-                        vulputate fringilla. Donec lacinia congue felis in faucibus.
-                    </div>
-                    <a href="#" class="badge badge-danger sm-margin-right">delete</a>
-                    <a href="#" class="badge badge-primary sm-margin-right">edit</a>
-                </li>
-                <hr class="my-4">
-                <li class="media my-4">
-                    <div class="media-body">
-                        <h6 class="mt-0 mb-1 text-secondary">12.08.2018</h6>
-                        Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin. Cras
-                        purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi
-                        vulputate fringilla. Donec lacinia congue felis in faucibus.
-                    </div>
-                    <a href="#" class="badge badge-danger  sm-margin-right">delete</a>
-                    <a href="#" class="badge badge-primary sm-margin-right">edit</a>
-                </li>
-                <hr class="my-4">
-                <li class="media">
-                    <div class="media-body">
-                        <h6 class="mt-0 mb-1 text-secondary">12.08.2018</h6>
-                        Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin. Cras
-                        purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi
-                        vulputate fringilla. Donec lacinia congue felis in faucibus.
-                    </div>
-                     <a href="#" class="badge badge-danger sm-margin-right">delete</a>
-                     <a href="#" class="badge badge-primary sm-margin-right">edit</a>
-                </li>
-                <hr class="my-4">
+                {% for note in book.notes %}
+                    <li class="media">
+                        <div class="media-body">
+                            <h6 class="mt-0 mb-1 text-secondary">{{ note.created_on }}</h6>
+                            <p style="Word-break:break-all">{{ note.text }}</p>
+                        </div>
+                        {% call f.form_tag('library.delete_post',
+                        post_id=note.id, genre=book.genre.title, book_id=book.id, title=book.title) %}
+                            <button href="#" class="badge badge-danger sm-margin-right">delete</button>
+                            <button href="#" class="badge badge-primary sm-margin-right">edit</button>
+                        {% endcall %}
+
+                    </li>
+                    <hr class="my-4">
+                {% endfor %}
             </ul>
-            <form action="">
-                <div class="form-group">
-                    <textarea class="form-control" name="" id="" cols="50" rows="5"></textarea>
-                </div>
+            {% call f.form_tag('library.detail', genre=book.genre.title, book_id=book.id, title=book.title) %}
+                 {% call f.form_group(form.text, placeholder="Enter Text", rows='5', cols='50') %}
+                 {% endcall %}
                 <button type="submit" class="btn btn-primary">Post</button>
-            </form>
+            {% endcall %}
         </div>
     </div>
 {% endblock %}

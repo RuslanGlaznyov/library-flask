@@ -39,4 +39,4 @@ class ResourceMixin(object):
 
     def delete(self):
         db.session.delete(self)
-        return db.session.commtit()
+        return db.session.commit()

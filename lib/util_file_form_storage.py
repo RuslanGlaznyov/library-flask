@@ -10,14 +10,16 @@ def create_folder(file_path):
         os.mkdir(file_path)
 
 
-def save_file(form_data, type_file):
+def save_file(form_data, type_file, custom_name=None):
+    filename, ext = os.path.splitext(form_data.filename)
+    if custom_name:
+        filename = custom_name
 
-    filename = secure_filename(os.path.splitext(form_data.filename)[0] + DevelopmentConfig.FILE_SPLIT
-                               + str(int(t.time())) +
-                               os.path.splitext(form_data.filename)[1])
+    unique_filename = secure_filename(filename + DevelopmentConfig.FILE_SPLIT
+                                      + str(int(t.time())) + ext)
 
     file_path = os.path.join(
-        DevelopmentConfig.UPLOAD_PATH, type_file, filename
+        DevelopmentConfig.UPLOAD_PATH, type_file, unique_filename
     )
 
     create_folder(os.path.join(DevelopmentConfig.UPLOAD_PATH, type_file))

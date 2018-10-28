@@ -1,9 +1,10 @@
 from flask import Flask
+
 from app.blueprints.login.views import login
 from app.blueprints.library.views import library
 from app.extensions import debug_toolbar
 from app.extensions import db
-from app.blueprints.library.models.book import Book
+from app.blueprints.library.models import Book, Genre
 
 
 def create_app():
@@ -29,7 +30,7 @@ flask_app = create_app()
 
 @flask_app.shell_context_processor
 def make_shell_context():
-    return {'db': db, 'Book': Book}
+    return {'db': db, 'Book': Book, 'Genre': Genre}
 
 
 if __name__ == '__main__':
