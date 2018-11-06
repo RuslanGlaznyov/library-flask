@@ -1,0 +1,35 @@
+{% extends 'layouts/app.html' %}
+{% import 'macros/form.html'as f with context %}
+{% import 'macros/modal-window.html' as modal with context %}
+
+
+{% block body %}
+    <div class="row md-margin-top">
+        <div class="left-block col-md-4">
+            <div class="card" style="width: 18rem;">
+                <img class="card-img-top" src="{{ url_for('static', filename=book.icon_path) }}" alt="Card image cap">
+                <div class="card-body">
+                    <h5 class="card-title">{{ book.title }}</h5>
+                    <p class="card-text">{{ book.desc }}</p>
+                    <h4>Genre:</h4><a href="#" class="badge badge-success">{{ book.genre.title }}</a>
+                    <h4>Status: <span style="color: green">{{ book.status }}</span></h4>
+                    <a href="#" class="btn btn-primary btn-block">download</a>
+                    <a href="#" class="btn btn-primary btn-block">send to telegram</a>
+                    <a href="#" class="btn btn-danger btn-block">delete</a>
+                </div>
+            </div>
+            <div class="jumbotron sm-margin-top">
+                <h3>Change status</h3>
+                {% for status in [('success','Done'), ('danger','Todo'),('warning','In progress'), ('secondary','Save')] %}
+                    {% call f.form_tag('library.change_status', genre=book.genre.title, book_id=book.id, title=book.title, status=status[1]) %}
+                    <button class="badge badge-{{ status[0] }}">{{ status[1] }}</button>
+                    {% endcall %}
+                {% endfor %}
+            </div>
+        </div>
+        <div class="right-block col-md-8 md-margin-button">
+            {% block note %}
+            {% endblock %}
+        </div>
+    </div>
+{% endblock %}
