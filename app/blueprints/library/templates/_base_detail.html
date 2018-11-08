@@ -1,8 +1,7 @@
 {% extends 'layouts/app.html' %}
 {% import 'macros/form.html'as f with context %}
 {% import 'macros/modal-window.html' as modal with context %}
-
-
+{% import 'macros/rating.html' as r %}
 {% block body %}
     <div class="row md-margin-top">
         <div class="left-block col-md-4">
@@ -13,12 +12,23 @@
                     <p class="card-text">{{ book.desc }}</p>
                     <h4>Genre:</h4><a href="#" class="badge badge-success">{{ book.genre.title }}</a>
                     <h4>Status: <span style="color: green">{{ book.status }}</span></h4>
-                    <a href="#" class="btn btn-primary btn-block">download</a>
+                    <a href="{{ url_for('library.download_book',
+                    genre=book.genre.title, book_id=book.id, title=book.title) }}" class="btn btn-primary btn-block">download</a>
                     <a href="#" class="btn btn-primary btn-block">send to telegram</a>
-                    <a href="#" class="btn btn-danger btn-block">delete</a>
+                    <button type="button" class="btn btn-danger btn-block" data-toggle="modal"
+                        data-target="#DeleteBook{{ book.id|string }}">
+                    delete
+                </button>
+                {% call modal.render_modal_window('DeleteBook'+ book.id|string,'library.delete_book',
+                                                           btn_class='danger', btn_comfirm_text='DELETE', title_form='DELETE BOOK',
+                                                           genre=book.genre.title, book_id=book.id, title=book.title) %}
+                    <p>Are you sure about that?</p>
+                {% endcall %}
                 </div>
             </div>
             <div class="jumbotron sm-margin-top">
+                <h3>Rating</h3>
+                {{ r.rander_set_rating(book.rating, book) }}
                 <h3>Change status</h3>
                 {% for status in [('success','Done'), ('danger','Todo'),('warning','In progress'), ('secondary','Save')] %}
                     {% call f.form_tag('library.change_status', genre=book.genre.title, book_id=book.id, title=book.title, status=status[1]) %}

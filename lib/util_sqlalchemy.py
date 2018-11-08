@@ -31,6 +31,16 @@ class ResourceMixin(object):
                            default=tzware_datetime,
                            onupdate=tzware_datetime)
 
+    @classmethod
+    def sort_by(cls, field, direction):
+        if field not in cls.__table__.columns:
+            field = 'created_on'
+
+        if direction not in ('asc', 'desc'):
+            direction = 'asc'
+
+        return field, direction
+
     def save(self):
         db.session.add(self)
         db.session.commit()

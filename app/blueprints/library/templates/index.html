@@ -1,0 +1,76 @@
+{% extends 'layouts/app.html' %}
+{% import 'macros/items.html' as items %}
+{% import 'macros/rating.html' as r %}
+{% import 'macros/form.html' as f with context %}
+
+{% block body %}
+    <div class="row">
+        <div class="col-md-10 md-margin-top">
+            <div class="row justify-content-between" style="padding:0 20px">
+                <h1>List of item</h1>
+                <a href="{{ url_for('library.new') }}" class="btn btn-outline-success" role="button" style="height: 40px">New Book</a>
+            </div>
+            {{ f.search(request.endpoint) }}
+            {% if books.total == 0 %}
+                 <h3>No result found</h3>
+            {% else %}
+            <div class="table-responsive-sm md-margin-top">
+            <tbody>
+                <table class="table">
+                    <thead class="thead-light">
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">icon</th>
+                        <th scope="col">{{ items.sort('title', 'Title') }}</th>
+                        <th scope="col">{{ items.sort('created_on', 'Date') }}</th>
+                        <th scope="col">{{ items.sort('rating', 'Rating') }}</th>
+                        <th scope="col">status</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for book in books.items %}
+                        <tr>
+                            <th scope="row">{{ book.id }}</th>
+                            <td><a href="{{ url_for('library.detail', genre=book.genre.title,  book_id=book.id, title=book.title) }}">
+                                <img src="{{ url_for('static', filename=book.icon_path) }}" style="width: 100px" alt=""></a>
+                            </td>
+                            <td>{{ book.title }}</td>
+                            <td>{{ book.created_on.strftime('%m-%d-%Y') }}</td>
+                            <td>
+                                {{ r.rander_rating(book.rating) }}
+                            </td>
+                            <td>{{ book.status }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% endif %}
+        </div>
+
+        <aside class="col-md-2 blog-sidebar">
+            <div class="p-3">
+                <h4 class="font-italic">Genre</h4>
+                <ol class="list-unstyled mb-0">
+                    <li><a href="{{
+                            url_for(request.endpoint,
+                                        q=q,
+                                        sort=field,
+                                        direction=direction,
+                                        genre='')
+                            }}">all genre</a></li>
+                    {% for gen in genre %}
+                         <li><a class="" href="{{ url_for(request.endpoint,
+                                        q=q,
+                                        sort=field,
+                                        direction=direction,
+                                        genre=gen) }}">{{ gen }}</a></li>
+                    {% endfor %}
+                </ol>
+            </div>
+        </aside>
+    </div>
+    {% if books.total > 0 %}
+        {{ items.paginate(books) }}
+    {% endif %}
+{% endblock %}

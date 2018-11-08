@@ -3,7 +3,7 @@
 
 {% block body %}
 <div class="border" style="padding: 50px; margin-top: 50px; margin-bottom: 150px;">
-    {% call f.form_tag('library.new') %}
+    {% call f.form_tag('library.new', enctype='multipart/form-data') %}
         <h1>New Book form</h1>
         {% call f.form_group(form.title, placeholder="Enter Title") %}
         {% endcall %}
@@ -17,8 +17,10 @@
         </div>
         {% call f.form_group(form.genre) %}
         {% endcall %}
+        {% call f.form_group(form.new_genre) %}
+        {% endcall %}
         <button type="submit" class="btn btn-primary">save</button>
-        <a href="{{ url_for('library.home') }}" class="btn btn-danger" role="button" style="height: 40px">Cancel</a>
+        <a href="{{ url_for('library.index') }}" class="btn btn-danger" role="button" style="height: 40px">Cancel</a>
     {% endcall %}
 </div>
 {% endblock %}

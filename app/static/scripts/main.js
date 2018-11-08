@@ -15,3 +15,7 @@ $('#book').on('change', function () {
 
     $(this).next('.custom-file-label').html(fileName);
 });
+
+$('.sb-form').click(function(e) {
+    e.target.form.submit()
+});

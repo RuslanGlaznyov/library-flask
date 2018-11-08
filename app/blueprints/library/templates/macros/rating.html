@@ -1,0 +1,32 @@
+{% import 'macros/form.html'as f with context %}
+
+{% macro rander_rating(asses) %}
+    {% for i in range(1,6) %}
+        {% if i <= asses %}
+            <span class="fas fa-star"></span>
+        {% else %}
+             <span class="far fa-star"></span>
+        {% endif %}
+    {% endfor %}
+{% endmacro %}
+
+
+{% macro rander_set_rating(asses, book) %}
+    <div class="rating">
+    {% for i in range(1,6) %}
+        {% if i <= asses %}
+            <form action="{{ url_for('library.set_rating',
+                             genre=book.genre.title, book_id=book.id, title=book.title, rating=i) }}"
+                             method="post">
+                <button class="reset-btn"><i class="rating-star fas fa-star"></i></button>
+            </form>
+        {% else  %}
+            <form action="{{ url_for('library.set_rating',
+                             genre=book.genre.title, book_id=book.id, title=book.title, rating=i) }}"
+                             method="post">
+                <button class="reset-btn"><i class="rating-star far fa-star"></i></button>
+            </form>
+        {% endif %}
+    {% endfor %}
+    </div>
+{% endmacro %}

@@ -1,3 +1,5 @@
+from sqlalchemy import or_
+
 from app.extensions import db
 from lib.util_sqlalchemy import ResourceMixin
 
@@ -14,7 +16,7 @@ class Book(ResourceMixin, db.Model):
     title = db.Column(db.String(128))
     desc = db.Column(db.String(512))
     status = db.Column(db.Enum('Todo', 'In progress', 'Save', 'Done'), server_default='Save')
-    rating = db.Column(db.Integer)
+    rating = db.Column(db.Integer(), default=0)
     icon_path = db.Column(db.String(128))
     book_path = db.Column(db.String(128))
 
@@ -23,6 +25,17 @@ class Book(ResourceMixin, db.Model):
 
     def __repr__(self):
         return '<Book {}>'.format(self.title)
+
+    @classmethod
+    def search(cls, query):
+        if not query:
+            return ''
+
+        search_query = '%{0}%'.format(query)
+        search_chain = (Book.title.ilike(search_query),
+                        Book.desc.ilike(search_query))
+
+        return or_(*search_chain)
 
 
 class Note(ResourceMixin, db.Model):

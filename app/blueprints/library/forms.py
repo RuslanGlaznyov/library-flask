@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, TextAreaField, SelectField, SubmitField, validators
-from wtforms.validators import DataRequired, Length
+from wtforms.validators import DataRequired, Length, Optional
 from flask_wtf.file import FileField, FileRequired, FileAllowed
 from wtforms.ext.sqlalchemy.fields import QuerySelectField
 from app.blueprints.library.models import Genre
@@ -8,7 +8,7 @@ from app.blueprints.library.models import Genre
 
 class NewBook(FlaskForm):
     title = StringField('Title', validators=[DataRequired(), Length(1, 128)])
-    desc = TextAreaField('Description', validators=[Length(1, 2054)])
+    desc = TextAreaField('Description', validators=[Length(0, 2054)])
     icon = FileField('Icon upload', validators=[
         FileRequired(),
         FileAllowed(['jpg', 'png', 'svg'], 'Images only!')
@@ -18,7 +18,13 @@ class NewBook(FlaskForm):
         FileAllowed(['epub', 'fb2', 'pdf', 'txt'], 'Books only!')
     ])
     genre = QuerySelectField(query_factory=lambda: Genre.query.all())
+    new_genre = StringField('New genre', validators=[ Length(0, 128)]
+                            )
 
 
 class NoteForm(FlaskForm):
     text = TextAreaField('Note', validators=[Length(0, 2054)])
+
+
+class SearchForm(FlaskForm):
+    q = StringField('Search terms', [Optional(), Length(1, 256)])

@@ -12,9 +12,15 @@ html {
 body {
     margin-bottom: 10vh;
 }
+.text-template{
+    Word-break:break-all
+}
 
 /*--- margin and padding ---*/
-
+.margin-center{
+   display: flex;
+    justify-content: center;
+}
 .md-margin-top {
   margin-top: 40px;
 }
@@ -27,4 +33,58 @@ body {
 }
 .sm-margin-right{
     margin-right: 5px;
+}
+/*------------------sort field-------------------------------*/
+.sort:after {
+  content: '\f0dc';
+  font-family:"Font Awesome 5 Free";
+  margin-left: 6px;
+  color: #BBB;
+}
+
+.asc:after {
+  content: '\f0dd';
+  font-family: "Font Awesome 5 Free";
+  margin-left: 6px;
+  color: #444;
+}
+
+.desc:after {
+  content: '\f0de';
+  font-family: "Font Awesome 5 Free";
+  margin-left: 6px;
+  color: #444;
+}
+
+/*---------------------- rating style ------------*/
+.rating{
+    display: flex;
+}
+
+.rating-star:hover {
+    cursor: pointer;
+}
+
+.reset-btn {
+    border: none;
+    margin: 0;
+    padding: 0;
+    width: auto;
+    overflow: visible;
+
+    background: transparent;
+
+    /* inherit font & color from ancestor */
+    color: inherit;
+    font: inherit;
+
+    /* Normalize `line-height`. Cannot be changed from `normal` in Firefox 4+. */
+    line-height: normal;
+
+    /* Corrects font smoothing for webkit */
+    -webkit-font-smoothing: inherit;
+    -moz-osx-font-smoothing: inherit;
+
+    /* Corrects inability to style clickable `input` types in iOS */
+    -webkit-appearance: none;
 }

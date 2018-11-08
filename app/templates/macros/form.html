@@ -12,7 +12,7 @@
 {%- endmacro -%}
 
 {# Render a form field. #}
-{%- macro field(f, css_class='form-control', id='') -%}
+{%- macro field(f, css_class='form-control') -%}
   {{ f(class=css_class, **kwargs) }}
 {%- endmacro -%}
 
@@ -28,11 +28,11 @@
 {%- endmacro -%}
 
 {# Render a form tag that contains a CSRF token and all hidden fields. #}
-{%- macro form_tag(endpoint, fid='', css_class='', method='POST') -%}
-  <form action="{{ url_for(endpoint, **kwargs) }}" method="{{ method }}"
-        id="{{ fid }}" class="{{ css_class }}" role="form" enctype="multipart/form-data">
-    {{ form.hidden_tag() }}
-    {{ caller () }}
+{%- macro form_tag(endpoint, fid='', css_class='', enctype='application/x-www-form-urlencoded', method='POST') -%}
+    <form action="{{ url_for(endpoint, **kwargs) }}" method="{{ method }}"
+        id="{{ fid }}" class="{{ css_class }}" role="form" enctype="{{ enctype }}">
+      {{ form.hidden_tag() }}
+      {{ caller () }}
   </form>
 {%- endmacro -%}
 
@@ -46,8 +46,7 @@
         </div>
 {%- endmacro %}
 {# Render a form group with errors for various field types. #}
-{%- macro form_group(f, css_class='', id='', isCustomUpload=False) -%}
-{#    {{ css_class }}#}
+{%- macro form_group(f, css_class='', isCustomUpload=False) -%}
     {% if f.errors %}
             {% set css_class = css_class + ' has-error ' + kwargs.pop('class', '') %}
     {% endif %}
@@ -69,4 +68,17 @@
             </div>
     {% endif %}
 {%- endmacro %}
+
+{# Render a form for searching. #}
+{%- macro search(endpoint) -%}
+  {% call form_tag(endpoint, method='get', **kwargs) %}
+    <label for="q"></label>
+    <div class="input-group md-margin-bottom">
+      <input type="text" class="form-control"
+             id="q" name="q" value="{{ request.args.get('q', '') }}"
+             placeholder="Search by typing, then press enter...">
+    </div>
+  {% endcall %}
+{%- endmacro -%}
+
 
