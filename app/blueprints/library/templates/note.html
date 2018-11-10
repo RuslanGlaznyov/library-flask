@@ -1,0 +1,34 @@
+{% extends '_base_detail.html' %}
+{% import 'macros/form.html'as f with context %}
+{% import 'macros/modal-window.html' as modal with context %}
+
+{% block note %}
+    <h1>Notes</h1>
+    <ul class="list-unstyled">
+        {% for note in book.notes %}
+            <li class="media">
+                <div class="media-body">
+                    <h6 class="mt-0 mb-1 text-secondary">{{ note.created_on.strftime('%m-%d-%Y') }}</h6>
+                    <div class="text-template">{{ note.text|safe }}</div>
+                </div>
+                <button type="button" class="badge badge-danger sm-margin-right" data-toggle="modal"
+                        data-target="#DeleteNote{{ note.id|string }}">
+                    delete
+                </button>
+                {% call modal.render_modal_window('DeleteNote'+ note.id|string,'library.delete_note',
+                                                           btn_class='danger', btn_comfirm_text='DELETE', title_form='DELETE NOTE',
+                                                           genre=book.genre.title, book_id=book.id, title=book.title, note_id=note.id) %}
+                    <p>Are you sure about that?</p>
+                {% endcall %}
+                <a class="badge badge-primary sm-margin-right" href="{{ url_for('library.edit_note',
+                genre=book.genre.title, book_id=book.id, title=book.title, note_id=note.id) }}" role="button">edit</a>
+            </li>
+            <hr class="my-4">
+        {% endfor %}
+    </ul>
+    {% call f.form_tag('library.detail', genre=book.genre.title, book_id=book.id, title=book.title) %}
+        {% call f.form_group(form.text, id='editor1', placeholder="Enter Text", rows='5', cols='50') %}
+        {% endcall %}
+        <button type="submit" class="btn btn-primary">Post</button>
+    {% endcall %}
+{% endblock %}

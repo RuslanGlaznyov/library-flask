@@ -1,0 +1,11 @@
+{% extends '_base_detail.html' %}
+
+{% block note %}
+     {% call f.form_tag('library.edit_note', enctype='multipart/form-data',
+     genre=ref.genre, book_id=ref.book_id, title=ref.title, note_id=ref.note_id) %}
+        {% call f.form_group(form.text, placeholder="Enter Title", id='editor1') %}
+        {% endcall %}
+         <a href="{{ url_for('library.detail', genre=ref.genre, book_id=ref.book_id, title=ref.title) }}" class="btn btn-secondary" role="button">Cancel</a>
+         <button type="submit" class="btn btn-success">Save</button>
+     {% endcall %}
+{% endblock %}

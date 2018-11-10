@@ -7,9 +7,11 @@ from app.extensions import db
 from app.blueprints.library.models import Book, Genre
 
 
-def create_app():
+def create_app(test_config=None):
     app = Flask(__name__)
     app.config.from_object('config.settings.DevelopmentConfig')
+    if test_config:
+        app.config.update(test_config)
 
     app.register_blueprint(login)
     app.register_blueprint(library, url_prefix='/library')
@@ -24,8 +26,9 @@ def extensions(app):
 
 flask_app = create_app()
 
-# with flask_app.app_context():
-#     db.create_all()
+with flask_app.app_context():
+    # db.drop_all()
+    db.create_all()
 
 
 @flask_app.shell_context_processor

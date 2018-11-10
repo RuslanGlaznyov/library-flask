@@ -117,7 +117,10 @@ def download_book(genre, book_id, title):
 @library.route('/delete_book/<genre>/<int:book_id>/<title>', methods=['POST'])
 def delete_book(genre, book_id, title):
     book = Book.query.get(book_id)
+    genre = Genre.query.get(book.genre_id)
     delete_file(book.book_path)
     delete_file(book.icon_path)
+    if len(genre.books.all()) == 1:
+        genre.delete()
     book.delete()
     return redirect(url_for('library.index'))
