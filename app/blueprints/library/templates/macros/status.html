@@ -1,0 +1,19 @@
+{% set status_dict =
+            {
+            'Done': 'green',
+            'Todo': 'red',
+            'In progress': 'orange',
+            'Save': 'gray',
+
+     } %}
+{% macro render_status(status) %}
+    {% set genreSort = request.args.get('genreSort', None) %}
+    <span style="color: {{ status_dict[status] }}"><a class="link-unstyled" href="{{ url_for('library.index',
+            q=q,
+            sort=field,
+            direction=direction,
+            status=status,
+            genreSort=genreSort,
+            **kwargs) }}">{{ status }}</a></span>
+
+{% endmacro %}

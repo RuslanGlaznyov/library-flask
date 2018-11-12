@@ -1,9 +1,10 @@
-from flask import Blueprint, render_template, redirect, url_for, Response, request, send_file
+from flask import Blueprint, render_template, redirect, url_for, Response, request, send_file, abort
 from app.blueprints.library.models import Book, Genre, Note
 from app.blueprints.library.forms import NewBook, NoteForm
 from lib.util_file_form_storage import save_file, delete_file
 from sqlalchemy import text
 from app.blueprints.library.forms import SearchForm
+from config import settings
 
 library = Blueprint('library', __name__, template_folder='templates')
 
@@ -19,11 +20,16 @@ def index(page):
     sort_by = Book.sort_by(request.args.get('sort', 'created_on'),
                            request.args.get('direction', 'desc'))
 
-    sort_by_genre = request.args.get('genre', '')
+    sort_by_genre = request.args.get('genreSort', '')
+    sort_by_status = request.args.get('status', '')
+
     order_values = '{0} {1} '.format(sort_by[0], sort_by[1])
 
     if sort_by_genre in [str(value) for value in Genre.query.all()]:
         book_query = book_query.filter(Book.genre.has(title=sort_by_genre))
+
+    if sort_by_status in settings.DevelopmentConfig.STATUS:
+        book_query = book_query.filter_by(status=sort_by_status)
 
     paginate_books = book_query\
         .filter(Book.search(request.args.get('q', ''))) \
@@ -111,7 +117,10 @@ def set_rating(genre, book_id, title, rating):
 @library.route('/download/<genre>/<int:book_id>/<title>')
 def download_book(genre, book_id, title):
     book = Book.query.get(book_id)
-    return send_file('static/' + book.book_path)
+    try:
+        return send_file('static/' + book.book_path)
+    except Exception as e:
+        abort(500)
 
 
 @library.route('/delete_book/<genre>/<int:book_id>/<title>', methods=['POST'])
@@ -120,6 +129,7 @@ def delete_book(genre, book_id, title):
     genre = Genre.query.get(book.genre_id)
     delete_file(book.book_path)
     delete_file(book.icon_path)
+
     if len(genre.books.all()) == 1:
         genre.delete()
     book.delete()

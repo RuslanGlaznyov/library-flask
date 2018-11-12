@@ -8,8 +8,10 @@ class DevelopmentConfig(Config):
     try:
         BASEDIR = BASEDIR.split(':')[1]
     except Exception:
-        pass
+        BASEDIR = BASEDIR
+
     DEBUG = True
+    STATUS = ['Todo', 'Done', 'In progress', 'Save']
     SERVER_NAME = 'localhost.localdomain:5000'
     SECRET_KEY = 'secret'
     SQLALCHEMY_TRACK_MODIFICATIONS = False

@@ -2,6 +2,7 @@
 {% import 'macros/items.html' as items %}
 {% import 'macros/rating.html' as r %}
 {% import 'macros/form.html' as f with context %}
+{% import 'macros/status.html' as s  %}
 {% block body %}
     <div class="row">
         <div class="col-md-10 md-margin-top">
@@ -38,7 +39,7 @@
                             <td>
                                 {{ r.rander_rating(book.rating) }}
                             </td>
-                            <td>{{ book.status }}</td>
+                            <td>{{ s.render_status(book.status) }}</td>
                         </tr>
                     {% endfor %}
                     </tbody>
@@ -52,18 +53,39 @@
                 <h4 class="font-italic">Genre</h4>
                 <ol class="list-unstyled mb-0">
                     <li><a href="{{
-                            url_for(request.endpoint,
-                                        q=q,
-                                        sort=field,
-                                        direction=direction,
-                                        genre='')
+                            url_for(request.endpoint)
                             }}">all genre</a></li>
                     {% for gen in genre %}
-                         <li><a class="" href="{{ url_for(request.endpoint,
+                        {% if gen|string == request.args.get('genreSort')%}
+                            <li>
+                             <a style="color: black"  href="{{ url_for(request.endpoint,
                                         q=q,
                                         sort=field,
                                         direction=direction,
-                                        genre=gen) }}">{{ gen }}</a></li>
+                                        status=status,
+                                        genreSort=gen) }}">{{ gen }}</a></li>
+                        {% else %}
+                            <li><a href="{{ url_for(request.endpoint,
+                                        q=q,
+                                        sort=field,
+                                        direction=direction,
+                                        status=status,
+                                        genreSort=gen) }}">{{ gen }}</a></li>
+                        {% endif %}
+                    {% endfor %}
+                </ol>
+            </div>
+            <div class="jumbotron sm-margin-top">
+                <ol class="list-unstyled mb-0">
+                    <h4>Status</h4>
+                     {% for status in s.status_dict  %}
+                         {% if status == request.args.get('status') %}
+                            <li style="text-align:center; background: white; border-radius: 10px">{{ s.render_status(status) }}</li>
+                         {% else %}
+                            <li>{{ s.render_status(status) }}</li>
+                         {% endif %}
+
+
                     {% endfor %}
                 </ol>
             </div>

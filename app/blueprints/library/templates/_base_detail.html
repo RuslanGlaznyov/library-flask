@@ -2,7 +2,9 @@
 {% import 'macros/form.html'as f with context %}
 {% import 'macros/modal-window.html' as modal with context %}
 {% import 'macros/rating.html' as r %}
+{% import 'macros/status.html' as s %}
 {% block body %}
+
     <div class="row md-margin-top">
         <div class="left-block col-md-4">
             <div class="card" style="width: 18rem;">
@@ -11,7 +13,7 @@
                     <h5 class="card-title">{{ book.title }}</h5>
                     <p class="card-text">{{ book.desc }}</p>
                     <h4>Genre:</h4><a href="#" class="badge badge-success">{{ book.genre.title }}</a>
-                    <h4>Status: <span style="color: green">{{ book.status }}</span></h4>
+                    <h4>Status: {{ s.render_status(book.status, book_id=book.id, genre=book.genre, title=book.title) }}</h4>
                     <a href="{{ url_for('library.download_book',
                     genre=book.genre.title, book_id=book.id, title=book.title) }}" class="btn btn-primary btn-block">download</a>
                     <a href="#" class="btn btn-primary btn-block">send to telegram</a>

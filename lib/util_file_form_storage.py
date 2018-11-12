@@ -50,15 +50,3 @@ def delete_file(file_path):
     except Exception as e:
         pass
 
-
-def save_fake_file(src, type_file):
-    filename, ext = os.path.splitext(os.path.basename(src))
-
-    unique_filename = filename + DevelopmentConfig.FILE_SPLIT + str(int(t.time())) + ext
-
-    file_path = os.path.join(
-        DevelopmentConfig.BASEDIR, DevelopmentConfig.UPLOAD_PATH, type_file, unique_filename
-    )
-    create_folder(os.path.join(DevelopmentConfig.BASEDIR, DevelopmentConfig.UPLOAD_PATH, type_file))
-    shutil.copy2(src, file_path)
-    return file_path.split('static/')[1]

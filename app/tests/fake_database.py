@@ -3,12 +3,12 @@ import random
 from time import sleep
 
 from app.run_app import db
-from app.blueprints.library.models import Book, Genre
+from app.blueprints.library.models import Book, Genre, Note
 from app.run_app import flask_app
 
 from faker import Faker
 
-from lib.util_file_form_storage import save_fake_file, save_file
+from lib.util_file_form_storage import save_file
 
 fake = Faker()
 
@@ -35,12 +35,27 @@ def create_fake_books(genre_number, books_qt):
                     icon_path=save_file(icon_path, 'icon', fake_file=True),
                     book_path=save_file(book_path, Genre.query.get(genre_id).title, fake_file=True)
                     )
-        book.save()
+        sleep(1)
+        db.session.add(book)
+
+    db.session.commit()
 
 
-def create_fake_database(genres_qt=3, books_qt=50):
+def create_fake_notes(books_qt, max_notes_qt):
+    for book_id in range(1, books_qt + 1):
+        book = Book.query.get(book_id)
+        for i in range(random.randint(1, max_notes_qt)):
+            note = Note(text=fake.text(max_nb_chars=100, ext_word_list=None))
+            note.book_id = book.id
+            db.session.add(note)
+
+        db.session.commit()
+
+
+def create_fake_database(genres_qt=3, books_qt=50, max_notes_qt=20):
     create_fake_genres(genres_qt)
     create_fake_books(genres_qt, books_qt)
+    create_fake_notes(books_qt, max_notes_qt)
 
 
 if __name__ == '__main__':

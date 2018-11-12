@@ -26,9 +26,9 @@ def extensions(app):
 
 flask_app = create_app()
 
-with flask_app.app_context():
-    # db.drop_all()
-    db.create_all()
+# with flask_app.app_context():
+#     # db.drop_all()
+#     db.create_all()create_all
 
 
 @flask_app.shell_context_processor

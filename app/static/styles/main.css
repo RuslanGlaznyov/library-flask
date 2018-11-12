@@ -15,7 +15,10 @@ body {
 .text-template{
     Word-break:break-all
 }
-
+.link-unstyled, .link-unstyled:link, .link-unstyled:hover {
+  color: inherit;
+  text-decoration: inherit;
+}
 /*--- margin and padding ---*/
 .margin-center{
    display: flex;

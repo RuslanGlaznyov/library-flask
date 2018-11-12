@@ -2,7 +2,8 @@
     {% set sort = request.args.get('sort', None) %}
     {% set direction = request.args.get('direction', 'asc') %}
     {% set q = request.args.get('q', '') %}
-    {% set genre = request.args.get('genre', None) %}
+    {% set genreSort = request.args.get('genreSort', None) %}
+    {% set status = request.args.get('status', None) %}
 
     {% if title_header == None %}
         {% set label = field | title %}
@@ -26,7 +27,8 @@
                                         q=q,
                                         sort=field,
                                         direction=direction,
-                                        genre=genre,
+                                        genreSort=genreSort,
+                                        status=status,
                                         **request.view_args) }}">{{ label }}</a>
 {%- endmacro %}
 
@@ -57,7 +59,7 @@
                             <span class="page-link">{{ page }}</span>
                         {% endif %}
                     {% else %}
-                        <span class="ellipsis">…</span>
+                        <span class="page-link">…</span>
                     {% endif %}
                 </li>
             {%- endfor %}
