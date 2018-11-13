@@ -1,7 +1,8 @@
-from flask import Flask
+from flask import Flask, render_template
 
 from app.blueprints.login.views import login
 from app.blueprints.library.views import library
+from app.blueprints.stat.views import stat
 from app.extensions import debug_toolbar
 from app.extensions import db
 from app.blueprints.library.models import Book, Genre
@@ -15,6 +16,7 @@ def create_app(test_config=None):
 
     app.register_blueprint(login)
     app.register_blueprint(library, url_prefix='/library')
+    app.register_blueprint(stat, url_prefix='/stat')
     extensions(app)
     return app
 
@@ -26,9 +28,19 @@ def extensions(app):
 
 flask_app = create_app()
 
-# with flask_app.app_context():
-#     # db.drop_all()
-#     db.create_all()create_all
+
+@flask_app.errorhandler(404)
+def page_not_found(e):
+    return render_template('errors/404.html'), 404
+
+
+@flask_app.errorhandler(500)
+def page_not_found(e):
+    return render_template('errors/500.html'), 500
+
+@flask_app.errorhandler(401)
+def page_not_found(e):
+    return render_template('errors/401.html'), 404
 
 
 @flask_app.shell_context_processor

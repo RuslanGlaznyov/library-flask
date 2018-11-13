@@ -1,24 +1,26 @@
-from flask import Blueprint, render_template, redirect, url_for, Response, request, send_file, abort
+from flask import Blueprint, render_template, redirect, url_for, Response, request, send_file, abort, flash
 from app.blueprints.library.models import Book, Genre, Note
 from app.blueprints.library.forms import NewBook, NoteForm
 from lib.util_file_form_storage import save_file, delete_file
 from sqlalchemy import text
 from app.blueprints.library.forms import SearchForm
 from config import settings
+from app.blueprints.login.login_required import login_required
 
 library = Blueprint('library', __name__, template_folder='templates')
 
 
 @library.route('/', defaults={'page': 1})
 @library.route('/page/<int:page>')
+@login_required()
 def index(page):
     search_form = SearchForm()
     all_genre = Genre.query.all()
 
     book_query = Book.query
 
-    sort_by = Book.sort_by(request.args.get('sort', 'created_on'),
-                           request.args.get('direction', 'desc'))
+    sort_by = Book.sort_by(request.args.get('sort', 'created_on') or 'created_on',
+                           request.args.get('direction', 'desc') or 'desc')
 
     sort_by_genre = request.args.get('genreSort', '')
     sort_by_status = request.args.get('status', '')
@@ -40,6 +42,7 @@ def index(page):
 
 
 @library.route('/detail/<genre>/<int:book_id>/<title>', methods=['GET', 'POST'])
+@login_required()
 def detail(genre, book_id, title):
     form = NoteForm()
     current_book = Book.query.get(book_id)
@@ -51,6 +54,7 @@ def detail(genre, book_id, title):
 
 
 @library.route('/new', methods=['GET', 'POST'])
+@login_required()
 def new():
     form = NewBook()
     if form.validate_on_submit():
@@ -69,11 +73,13 @@ def new():
             genre=genre
         )
         book.save()
+        flash('New book is added.', 'success')
         return redirect(url_for('library.index'))
     return render_template('new.html', form=form)
 
 
 @library.route('/change-status/<genre>/<int:book_id>/<title>/<status>', methods=['POST'])
+@login_required()
 def change_status(genre, book_id, title, status):
     book = Book.query.get(book_id)
     book.status = status
@@ -82,13 +88,16 @@ def change_status(genre, book_id, title, status):
 
 
 @library.route('/delete-note/<genre>/<int:book_id>/<title>/<int:note_id>', methods=['POST'])
+@login_required()
 def delete_note(genre, book_id, title, note_id):
     note = Note.query.get(note_id)
     note.delete()
+    flash('Successfully deleted.', 'success')
     return redirect(url_for('library.detail', genre=genre, book_id=book_id, title=title))
 
 
 @library.route('/edit_note/<genre>/<int:book_id>/<title>/<int:note_id>', methods=['POST', 'GET'])
+@login_required()
 def edit_note(genre, book_id, title, note_id):
     note = Note.query.get(note_id)
     book = Book.query.get(book_id)
@@ -107,6 +116,7 @@ def edit_note(genre, book_id, title, note_id):
 
 
 @library.route('/set-rating/<genre>/<int:book_id>/<title>/<int:rating>', methods=['POST'])
+@login_required()
 def set_rating(genre, book_id, title, rating):
     book = Book.query.get(book_id)
     book.rating = rating
@@ -115,6 +125,7 @@ def set_rating(genre, book_id, title, rating):
 
 
 @library.route('/download/<genre>/<int:book_id>/<title>')
+@login_required()
 def download_book(genre, book_id, title):
     book = Book.query.get(book_id)
     try:
@@ -124,6 +135,7 @@ def download_book(genre, book_id, title):
 
 
 @library.route('/delete_book/<genre>/<int:book_id>/<title>', methods=['POST'])
+@login_required()
 def delete_book(genre, book_id, title):
     book = Book.query.get(book_id)
     genre = Genre.query.get(book.genre_id)
@@ -133,4 +145,5 @@ def delete_book(genre, book_id, title):
     if len(genre.books.all()) == 1:
         genre.delete()
     book.delete()
+    flash('Successfully deleted.', 'success')
     return redirect(url_for('library.index'))

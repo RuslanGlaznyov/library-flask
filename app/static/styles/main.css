@@ -19,6 +19,10 @@ body {
   color: inherit;
   text-decoration: inherit;
 }
+
+#flash-messages {
+    width: 1000px;
+}
 /*--- margin and padding ---*/
 .margin-center{
    display: flex;

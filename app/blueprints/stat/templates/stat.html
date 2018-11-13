@@ -1,0 +1,53 @@
+{% extends 'layouts/app.html' %}
+{% import 'macros/status.html' as s%}
+{% import 'macros/rating.html'as r %}
+{% block title %}Statistic{% endblock %}
+{% block body %}
+    <div class="row">
+        <div class="col-sm-6 md-margin-top">
+            <div class="card">
+                <div class="card-body">
+                    <ol class="list-unstyled mb-0">
+                    <h5 class="card-title">Status statistic</h5>
+                    {% for status, count in status_zip  %}
+                            <li style="background: white; border-radius: 10px">{{ s.render_status(status) }}: {{ count  }}</li>
+                    {% endfor %}
+                    </ol>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-6 md-margin-top">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Genre statistic</h5>
+                    <ol class="list-unstyled mb-0">
+                        {% for genre, count in genre_zip %}
+                             <li><a href="{{ url_for('library.index', genreSort=genre) }}">{{ genre }}</a>: {{ count }}</li>
+                        {% endfor %}
+                    </ol>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 md-margin-top">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Rating statistic</h5>
+                    <ol class="list-unstyled mb-0">
+                        {% for i, count in rating_zip%}
+                        <li>{{ r.rander_rating(i) }}: {{ count }}</li>
+                        {% endfor %}
+                    </ol>
+
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 md-margin-top">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Total Book: {{ total_book }}</h5>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

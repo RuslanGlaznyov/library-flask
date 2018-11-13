@@ -11,7 +11,8 @@ class DevelopmentConfig(Config):
         BASEDIR = BASEDIR
 
     DEBUG = True
-    STATUS = ['Todo', 'Done', 'In progress', 'Save']
+    PASSWORD = 'pass'
+    STATUS = ['Done', 'Todo', 'In progress', 'Save']
     SERVER_NAME = 'localhost.localdomain:5000'
     SECRET_KEY = 'secret'
     SQLALCHEMY_TRACK_MODIFICATIONS = False
