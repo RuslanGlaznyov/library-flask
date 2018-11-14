@@ -28,6 +28,8 @@ def extensions(app):
 
 flask_app = create_app()
 
+with flask_app.app_context():
+    db.create_all()
 
 @flask_app.errorhandler(404)
 def page_not_found(e):
