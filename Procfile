@@ -1,0 +1,1 @@
+web: env PYTHONPATH=$PYTHONPATH:$PWD/app gunicorn run_app:app

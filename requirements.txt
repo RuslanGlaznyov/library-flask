@@ -2,6 +2,7 @@ atomicwrites==1.2.1
 attrs==18.2.0
 blessings==1.7
 blinker==1.4
+bpython==0.17.1
 certifi==2018.10.15
 chardet==3.0.4
 Click==7.0
@@ -13,6 +14,7 @@ Flask-DebugToolbar==0.10.1
 Flask-SQLAlchemy==2.3.2
 Flask-WTF==0.14.2
 greenlet==0.4.15
+gunicorn==19.9.0
 idna==2.7
 ItsDangerous==1.0.0
 Jinja2==2.10

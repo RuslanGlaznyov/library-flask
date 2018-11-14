@@ -52,11 +52,16 @@ def make_shell_context():
 if flask_app.debug is not True:
     import logging
     from logging.handlers import RotatingFileHandler
-    file_handler = RotatingFileHandler('error.log', maxBytes=1024 * 1024 * 100, backupCount=20)
-    file_handler.setLevel(logging.ERROR)
-    formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
-    file_handler.setFormatter(formatter)
-    flask_app.logger.addHandler(file_handler)
+    if flask_app.config['LOG_TO_STDOUT']:
+        stream_handler = logging.StreamHandler()
+        stream_handler.setLevel(logging.INFO)
+        flask_app.logger.addHandler(stream_handler)
+    else:
+        file_handler = RotatingFileHandler('error.log', maxBytes=1024 * 1024 * 100, backupCount=20)
+        file_handler.setLevel(logging.ERROR)
+        formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
+        file_handler.setFormatter(formatter)
+        flask_app.logger.addHandler(file_handler)
 
 if __name__ == '__main__':
     flask_app.run()
