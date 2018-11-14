@@ -7,6 +7,10 @@ from config.settings import DevelopmentConfig
 
 
 def create_folder(file_path):
+    upload_dir = os.path.join(DevelopmentConfig.BASEDIR, DevelopmentConfig.UPLOAD_PATH)
+    if not os.path.exists(upload_dir):
+        os.mkdir(upload_dir)
+
     if not os.path.exists(file_path):
         os.mkdir(file_path)
 

@@ -20,8 +20,8 @@ class DevelopmentConfig(Config):
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or \
         'sqlite:///' + os.path.join(BASEDIR, 'data.db')
 
-    UPLOAD_PATH = 'app/static/uploads'
-    DOWNLOAD_PATH = 'app/static'
+    UPLOAD_PATH = os.environ.get('UPLOAD_PATH') or 'app/static/uploads'
+    DOWNLOAD_PATH = os.environ.get('DOWNLOAD_PATH') or 'app/static'
     FILE_SPLIT = 'KiiiiiK'
     DEBUG_TB_INTERCEPT_REDIRECTS = False
 
