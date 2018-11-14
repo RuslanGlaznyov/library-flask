@@ -3,17 +3,10 @@
 
 {% block body %}
     <div class="jumbotron md-margin-top">
-        {% call f.form_tag('login.login_page', enctype='multipart/form-data') %}
+        {% call f.form_tag('login.login_page') %}
             {% call f.form_group(form.password, placeholder="Enter Password") %}
             {% endcall %}
             <button type="submit" class="btn btn-primary">login</button>
         {% endcall %}
-{#        <form>#}
-{#            <div class="form-group">#}
-{#                <label for="exampleInputPassword1">Password</label>#}
-{#                <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">#}
-{#            </div>#}
-{#            <button type="submit" class="btn btn-primary">login</button>#}
-{#        </form>#}
     </div>
 {% endblock %}

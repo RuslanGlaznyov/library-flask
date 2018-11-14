@@ -22,3 +22,9 @@ def login_page():
             flash('incorrect password', 'danger')
             return redirect(url_for('login.login_page'))
     return render_template('login.html', form=form)
+
+
+@login.route('/logout')
+def log_out():
+    session.clear()
+    return redirect(url_for('login.login_page'))
