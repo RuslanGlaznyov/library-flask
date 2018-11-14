@@ -3,7 +3,6 @@ from flask import Flask, render_template
 from app.blueprints.login.views import login
 from app.blueprints.library.views import library
 from app.blueprints.stat.views import stat
-from app.extensions import debug_toolbar
 from app.extensions import db
 from app.blueprints.library.models import Book, Genre
 
@@ -23,7 +22,6 @@ def create_app(test_config=None):
 
 def extensions(app):
     db.init_app(app)
-    debug_toolbar.init_app(app)
 
 
 flask_app = create_app()
