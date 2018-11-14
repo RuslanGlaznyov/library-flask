@@ -2,3 +2,4 @@ venv/
 data.db
 .idea/
 app/static/uploads/
+.pytest_cache/
