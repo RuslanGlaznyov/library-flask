@@ -1,9 +1,9 @@
-{% extends 'layouts/base.html' %}
+{% extends 'layouts/app.html' %}
 
 {% block title %}Error 401{% endblock %}
 
 {% block body %}
-    <div class="center" style="text-align: center">
+    <div class="center md-margin-top md-margin-button" style="text-align: center">
         <img src="{{ url_for('static', filename='img/401.png') }}" alt="">
         <h3>401</h3>
         <h4>Unauthorized</h4>

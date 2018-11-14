@@ -1,9 +1,9 @@
-{% extends 'layouts/base.html' %}
+{% extends 'layouts/app.html' %}
 
 {% block title %}Error 404{% endblock %}
 
 {% block body %}
-    <div class="center" style="text-align: center">
+    <div class="center md-margin-top" style="text-align: center">
         <img src="{{ url_for('static', filename='img/404.jpg') }}" alt="">
         <h3>404</h3>
         <h4>Not found</h4>

@@ -38,6 +38,7 @@ def page_not_found(e):
 def page_not_found(e):
     return render_template('errors/500.html'), 500
 
+
 @flask_app.errorhandler(401)
 def page_not_found(e):
     return render_template('errors/401.html'), 404
@@ -47,6 +48,15 @@ def page_not_found(e):
 def make_shell_context():
     return {'db': db, 'Book': Book, 'Genre': Genre}
 
+
+if flask_app.debug is not True:
+    import logging
+    from logging.handlers import RotatingFileHandler
+    file_handler = RotatingFileHandler('error.log', maxBytes=1024 * 1024 * 100, backupCount=20)
+    file_handler.setLevel(logging.ERROR)
+    formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
+    file_handler.setFormatter(formatter)
+    flask_app.logger.addHandler(file_handler)
 
 if __name__ == '__main__':
     flask_app.run()

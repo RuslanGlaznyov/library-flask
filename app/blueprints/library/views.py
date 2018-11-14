@@ -14,6 +14,7 @@ library = Blueprint('library', __name__, template_folder='templates')
 @library.route('/page/<int:page>')
 @login_required()
 def index(page):
+    # return 1/0
     search_form = SearchForm()
     all_genre = Genre.query.all()
 

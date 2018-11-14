@@ -10,10 +10,10 @@ class DevelopmentConfig(Config):
     except Exception:
         BASEDIR = BASEDIR
 
-    DEBUG = True
+    DEBUG = False
     PASSWORD = 'pass'
     STATUS = ['Done', 'Todo', 'In progress', 'Save']
-    SERVER_NAME = 'localhost.localdomain:5000'
+    # SERVER_NAME = 'localhost.localdomain:5000'
     SECRET_KEY = 'secret'
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or \
