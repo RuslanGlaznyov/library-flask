@@ -22,7 +22,7 @@ class NewBook(FlaskForm):
         FileRequired(),
         FileAllowed(['epub', 'fb2', 'pdf', 'txt'], 'Books only!')
     ])
-    genre = QuerySelectField(query_factory=lambda: Genre.query.all())
+    genre = QuerySelectField(query_factory=lambda: Genre.query.all(), allow_blank=True)
     new_genre = StringField('New genre', validators=[Length(0, 128), unique_genre_validate])
 
 

@@ -58,11 +58,15 @@ def detail(genre, book_id, title):
 @login_required()
 def new():
     form = NewBook()
+
     if form.validate_on_submit():
-        genre = Genre.query.filter_by(title=str(form.genre.data)).first_or_404()
+        genre = Genre.query.filter_by(title=str(form.genre.data)).first()
         if form.new_genre.data:
             genre = Genre(title=form.new_genre.data)
             genre.save()
+        elif not genre:
+            flash('please select or add new genre', 'danger')
+            return redirect(url_for('library.new'))
 
         icon_path = save_file(form.icon.data, 'icon')
         book_path = save_file(form.book.data, genre.title)
