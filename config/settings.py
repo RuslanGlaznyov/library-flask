@@ -10,7 +10,7 @@ class DevelopmentConfig(Config):
     except Exception:
         BASEDIR = BASEDIR
 
-    DEBUG = True or os.environ.get('DEBUG')
+    DEBUG = os.environ.get('DEBUG') or True
     PASSWORD = 'pass'
     STATUS = ['Done', 'Todo', 'In progress', 'Save']
     LOG_TO_STDOUT = os.environ.get('LOG_TO_STDOUT')
