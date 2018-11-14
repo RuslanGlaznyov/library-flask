@@ -16,7 +16,7 @@ Flask-WTF==0.14.2
 greenlet==0.4.15
 gunicorn==19.9.0
 idna==2.7
-ItsDangerous==1.0.0
+ItsDangerous==1.1.0
 Jinja2==2.10
 MarkupSafe==1.0
 more-itertools==4.3.0
