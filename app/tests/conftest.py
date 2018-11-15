@@ -15,7 +15,8 @@ def app():
     test_config = {
         'DEBUG': False,
         'TESTING': True,
-        'SQLALCHEMY_DATABASE_URI': 'sqlite://'
+        'SQLALCHEMY_DATABASE_URI': 'sqlite://',
+        'SERVER_NAME': 'localhost.localdomain:5000'
     }
 
     _app = create_app(test_config=test_config)

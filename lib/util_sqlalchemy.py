@@ -5,6 +5,7 @@ from sqlalchemy import DateTime
 from lib.util_datetime import tzware_datetime
 import datetime
 
+
 class AwareDateTime(TypeDecorator):
     """
     A DateTime type which can only store tz-aware DateTimes.

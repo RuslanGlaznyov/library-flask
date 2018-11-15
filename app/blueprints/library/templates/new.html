@@ -3,8 +3,17 @@
 
 {% block body %}
 <div class="border" style="padding: 50px; margin-top: 50px; margin-bottom: 150px;">
-    {% call f.form_tag('library.new', enctype='multipart/form-data') %}
-        <h1>New Book form</h1>
+        {% if request.endpoint == 'library.new' %}
+            {% set title='New Book' %}
+            {% set endpoint='library.new' %}
+            {% set kw = {} %}
+        {% else %}
+            {% set title='Edit Book' %}
+            {% set endpoint='library.edit_book' %}
+            {% set kw = {'book_id': book.id, 'title': book.title, 'genre': book.genre.title}%}
+        {% endif %}
+    {% call f.form_tag(endpoint, enctype='multipart/form-data', **kw) %}
+         <h1>{{ title }}</h1>
         {% call f.form_group(form.title, placeholder="Enter Title") %}
         {% endcall %}
         {% call f.form_group(form.desc, rows='12') %}

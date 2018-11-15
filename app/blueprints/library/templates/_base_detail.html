@@ -29,7 +29,10 @@
                 </div>
             </div>
             <div class="jumbotron sm-margin-top">
-                <h3>Rating</h3>
+                <div class="d-flex justify-content-between">
+                    <h3>Rating</h3>
+                    <a href="{{ url_for('library.edit_book', book_id=book.id, genre=book.genre.title, title=book.title ) }}" ><i class="fas fa-cog fa-2x" ></i></a>
+                </div>
                 {{ r.rander_set_rating(book.rating, book) }}
                 <h3>Change status</h3>
                 {% for status in [('success','Done'), ('danger','Todo'),('warning','In progress'), ('secondary','Save')] %}

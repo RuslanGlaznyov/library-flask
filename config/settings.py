@@ -14,7 +14,6 @@ class DevelopmentConfig(Config):
     PASSWORD = 'pass'
     STATUS = ['Done', 'Todo', 'In progress', 'Save']
     LOG_TO_STDOUT = os.environ.get('LOG_TO_STDOUT')
-    # SERVER_NAME = 'localhost.localdomain:5000'
     SECRET_KEY = 'secret'
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or \

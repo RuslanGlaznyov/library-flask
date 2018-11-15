@@ -1,3 +1,5 @@
+for(var f=document.forms,i=f.length;i--;)f[i].setAttribute("novalidate",i)
+
 //set title input
 $('#icon').on('change', function () {
     //get the file name

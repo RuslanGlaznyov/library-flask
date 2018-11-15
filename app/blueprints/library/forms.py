@@ -11,7 +11,7 @@ def unique_genre_validate(form, field):
         raise ValidationError('Genre is already exist')
 
 
-class NewBook(FlaskForm):
+class BookForm(FlaskForm):
     title = StringField('Title', validators=[DataRequired(), Length(1, 128)])
     desc = TextAreaField('Description', validators=[Length(0, 2054)])
     icon = FileField('Icon upload', validators=[

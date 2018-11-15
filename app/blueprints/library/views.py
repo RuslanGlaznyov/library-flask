@@ -1,6 +1,8 @@
 from flask import Blueprint, render_template, redirect, url_for, Response, request, send_file, abort, flash
+from flask_wtf.file import FileAllowed
+
 from app.blueprints.library.models import Book, Genre, Note
-from app.blueprints.library.forms import NewBook, NoteForm
+from app.blueprints.library.forms import BookForm, NoteForm
 from lib.util_file_form_storage import save_file, delete_file
 from sqlalchemy import text
 from app.blueprints.library.forms import SearchForm
@@ -34,7 +36,7 @@ def index(page):
     if sort_by_status in settings.DevelopmentConfig.STATUS:
         book_query = book_query.filter_by(status=sort_by_status)
 
-    paginate_books = book_query\
+    paginate_books = book_query \
         .filter(Book.search(request.args.get('q', ''))) \
         .order_by(text(order_values)) \
         .paginate(page, 5, True)
@@ -57,7 +59,7 @@ def detail(genre, book_id, title):
 @library.route('/new', methods=['GET', 'POST'])
 @login_required()
 def new():
-    form = NewBook()
+    form = BookForm()
 
     if form.validate_on_submit():
         genre = Genre.query.filter_by(title=str(form.genre.data)).first()
@@ -81,6 +83,31 @@ def new():
         flash('New book is added.', 'success')
         return redirect(url_for('library.index'))
     return render_template('new.html', form=form)
+
+
+@library.route('/edit-book/<genre>/<int:book_id>/<title>', methods=['POST', 'GET'])
+@login_required()
+def edit_book(genre, book_id, title):
+    book = Book.query.get(book_id)
+    form = BookForm(obj=book)
+    form.icon.validators = [FileAllowed(['jpg', 'png', 'svg'], 'Images only!')]
+    form.book.validators = [FileAllowed(['epub', 'fb2', 'pdf', 'txt'], 'Books only!')]
+    if form.validate_on_submit():
+        # repeat code
+        genre = Genre.query.filter_by(title=str(form.genre.data)).first()
+        if form.new_genre.data:
+            genre = Genre(title=form.new_genre.data)
+            genre.save()
+        elif not genre:
+            flash('please select or add new genre', 'danger')
+            return render_template('new.html', form=form, book=book)
+
+        book.title = form.title.data
+        book.desc = form.desc.data
+        book.genre = genre
+        book.save()
+        return redirect(url_for('library.detail', genre=book.genre, title=book.title, book_id=book.id))
+    return render_template('new.html', form=form, book=book)
 
 
 @library.route('/change-status/<genre>/<int:book_id>/<title>/<status>', methods=['POST'])
