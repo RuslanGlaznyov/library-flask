@@ -19,6 +19,7 @@ class Book(ResourceMixin, db.Model):
     rating = db.Column(db.Integer(), default=0)
     icon_path = db.Column(db.String(128))
     book_path = db.Column(db.String(128))
+    drive_id = db.Column(db.String(128))
 
     def __init__(self, **kwargs):
         super(Book, self).__init__(**kwargs)
@@ -64,6 +65,7 @@ class Genre(ResourceMixin, db.Model):
 
     books = db.relationship('Book', backref='genre', lazy='dynamic')
 
+    folder_google_id = db.Column(db.String(128), unique=True)
     title = db.Column(db.String(128), unique=True)
 
     def __init__(self, **kwargs):

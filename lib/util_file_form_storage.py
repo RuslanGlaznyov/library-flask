@@ -54,3 +54,13 @@ def delete_file(file_path):
     except Exception as e:
         pass
 
+
+def clear_dir(path_folder):
+    for the_file in os.listdir(path_folder):
+        file_path = os.path.join(path_folder, the_file)
+        try:
+            if os.path.isfile(file_path):
+                os.unlink(file_path)
+
+        except Exception as e:
+            pass

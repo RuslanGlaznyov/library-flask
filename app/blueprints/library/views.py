@@ -8,6 +8,7 @@ from sqlalchemy import text
 from app.blueprints.library.forms import SearchForm
 from config import settings
 from app.blueprints.login.login_required import login_required
+import lib.util_google_drive as gd
 
 library = Blueprint('library', __name__, template_folder='templates')
 
@@ -71,12 +72,15 @@ def new():
             return redirect(url_for('library.new'))
 
         icon_path = save_file(form.icon.data, 'icon')
-        book_path = save_file(form.book.data, genre.title)
+        # book_path = save_file(form.book.data, genre.title)
+        book_id = gd.save_file(form.book.data, genre.title)
+
         book = Book(
             title=form.title.data,
             desc=form.desc.data,
             icon_path=icon_path,
-            book_path=book_path,
+            # book_path=book_path,
+            drive_id=book_id,
             genre=genre
         )
         book.save()
@@ -106,6 +110,7 @@ def edit_book(genre, book_id, title):
         book.desc = form.desc.data
         book.genre = genre
         book.save()
+        flash('Successfully edited', 'success')
         return redirect(url_for('library.detail', genre=book.genre, title=book.title, book_id=book.id))
     return render_template('new.html', form=form, book=book)
 

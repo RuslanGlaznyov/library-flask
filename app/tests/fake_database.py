@@ -35,7 +35,7 @@ def create_fake_books(genre_number, books_qt):
                     icon_path=save_file(icon_path, 'icon', fake_file=True),
                     book_path=save_file(book_path, Genre.query.get(genre_id).title, fake_file=True)
                     )
-        # sleep(1)
+        sleep(1)
         db.session.add(book)
 
     db.session.commit()
