@@ -19,7 +19,8 @@ class Book(ResourceMixin, db.Model):
     rating = db.Column(db.Integer(), default=0)
     icon_path = db.Column(db.String(128))
     book_path = db.Column(db.String(128))
-    drive_id = db.Column(db.String(128))
+    drive_book_id = db.Column(db.String(128))
+    drive_icon_id = db.Column(db.String(128))
 
     def __init__(self, **kwargs):
         super(Book, self).__init__(**kwargs)

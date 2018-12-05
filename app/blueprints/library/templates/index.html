@@ -30,11 +30,11 @@
                     </tr>
                     </thead>
                     <tbody>
-                    {% for book in books.items %}
+                    {% for book, icon_path in books%}
                         <tr>
                             <th scope="row">{{ book.id }}</th>
                             <td><a href="{{ url_for('library.detail', genre=book.genre.title,  book_id=book.id, title=book.title) }}">
-                                <img src="{{ url_for('static', filename=book.icon_path) }}" style="width: 100px" alt=""></a>
+                                <img src="{{ url_for('static', filename=icon_path) }}" style="width: 100px" alt=""></a>
                             </td>
                             <td>{{ book.title }}</td>
                             <td>{{ book.created_on.strftime('%m-%d-%Y') }}</td>
@@ -93,7 +93,7 @@
             </div>
         </aside>
     </div>
-    {% if books.total > 0 %}
-        {{ items.paginate(books) }}
+    {% if paginate.total > 0 %}
+        {{ items.paginate(paginate) }}
     {% endif %}
 {% endblock %}

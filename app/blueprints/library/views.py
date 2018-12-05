@@ -3,7 +3,8 @@ from flask_wtf.file import FileAllowed
 
 from app.blueprints.library.models import Book, Genre, Note
 from app.blueprints.library.forms import BookForm, NoteForm
-from lib.util_file_form_storage import save_file, delete_file
+from config.settings import DevelopmentConfig
+from lib.util_file_form_storage import save_file, delete_file, clear_dir
 from sqlalchemy import text
 from app.blueprints.library.forms import SearchForm
 from config import settings
@@ -17,7 +18,7 @@ library = Blueprint('library', __name__, template_folder='templates')
 @library.route('/page/<int:page>')
 @login_required()
 def index(page):
-    # return 1/0
+    clear_dir(DevelopmentConfig.BASEDIR + '/app/static/uploads/icon')
     search_form = SearchForm()
     all_genre = Genre.query.all()
 
@@ -42,19 +43,28 @@ def index(page):
         .order_by(text(order_values)) \
         .paginate(page, 5, True)
 
-    return render_template('index.html', form=search_form, books=paginate_books, genre=all_genre)
+    icon_path_list = []
+    drive, main_folder_id = gd.auth()
+    for book in paginate_books.items:
+        icon_path_list.append(gd.get_icon(book.drive_icon_id, drive))
+
+    paginate_books_and_icon_path = zip(paginate_books.items, icon_path_list)
+    return render_template('index.html', form=search_form, books=paginate_books_and_icon_path,
+                           paginate=paginate_books, genre=all_genre)
 
 
 @library.route('/detail/<genre>/<int:book_id>/<title>', methods=['GET', 'POST'])
 @login_required()
 def detail(genre, book_id, title):
+    drive, main_folder_id = gd.auth()
     form = NoteForm()
     current_book = Book.query.get(book_id)
     if form.validate_on_submit():
         note = Note(text=str(form.text.data), book_id=current_book.id)
         note.save()
         return redirect(url_for('library.detail', genre=genre, book_id=book_id, title=title))
-    return render_template('note.html', book=current_book, form=form)
+    icon_path = gd.get_icon(current_book.drive_icon_id, drive)
+    return render_template('note.html', book=current_book, form=form, icon_path=icon_path)
 
 
 @library.route('/new', methods=['GET', 'POST'])
@@ -71,16 +81,14 @@ def new():
             flash('please select or add new genre', 'danger')
             return redirect(url_for('library.new'))
 
-        icon_path = save_file(form.icon.data, 'icon')
-        # book_path = save_file(form.book.data, genre.title)
         book_id = gd.save_file(form.book.data, genre.title)
+        icon_id = gd.save_file(form.icon.data, 'icon')
 
         book = Book(
             title=form.title.data,
             desc=form.desc.data,
-            icon_path=icon_path,
-            # book_path=book_path,
-            drive_id=book_id,
+            drive_icon_id=icon_id,
+            drive_book_id=book_id,
             genre=genre
         )
         book.save()
@@ -165,8 +173,11 @@ def set_rating(genre, book_id, title, rating):
 @login_required()
 def download_book(genre, book_id, title):
     book = Book.query.get(book_id)
+
+    drive, main_folder_id = gd.auth()
+    path = gd.upload_file(book.drive_book_id, drive).split('app/')[1]
     try:
-        return send_file('static/' + book.book_path)
+        return send_file(path)
     except Exception as e:
         abort(500)
 
@@ -174,10 +185,14 @@ def download_book(genre, book_id, title):
 @library.route('/delete_book/<genre>/<int:book_id>/<title>', methods=['POST'])
 @login_required()
 def delete_book(genre, book_id, title):
+    drive, main_folder_id = gd.auth()
     book = Book.query.get(book_id)
     genre = Genre.query.get(book.genre_id)
-    delete_file(book.book_path)
-    delete_file(book.icon_path)
+    gd.delete_file(book.drive_book_id, drive)
+    gd.delete_file(book.drive_icon_id, drive)
+
+    # delete_file(book.book_path)
+    # delete_file(book.icon_path)
 
     if len(genre.books.all()) == 1:
         genre.delete()
