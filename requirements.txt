@@ -44,7 +44,7 @@ SQLAlchemy==1.2.12
 text-unidecode==1.2
 typing==3.6.6
 uritemplate==3.0.0
-urllib3==1.24
+urllib3==1.24.2
 wcwidth==0.1.7
 Werkzeug==0.14.1
 WTForms==2.2.1
