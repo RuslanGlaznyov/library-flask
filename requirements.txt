@@ -36,7 +36,7 @@ pytest==3.10.0
 pytest-cov==2.6.0
 python-dateutil==2.7.5
 pytz==2018.6
-PyYAML==5.1
+PyYAML==5.4
 requests==2.20.0
 rsa==4.1
 six==1.11.0
