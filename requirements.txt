@@ -38,7 +38,7 @@ python-dateutil==2.7.5
 pytz==2018.6
 PyYAML==5.1
 requests==2.20.0
-rsa==4.1
+rsa==4.7
 six==1.11.0
 SQLAlchemy==1.2.12
 text-unidecode==1.2
